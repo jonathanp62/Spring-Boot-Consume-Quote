@@ -30,17 +30,57 @@ package net.jmp.spring.boot.consume.quote;
  * SOFTWARE.
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
+
+import org.springframework.context.annotation.*;
+
+import org.springframework.web.client.RestTemplate;
+
 @SpringBootApplication
+@Configuration
+@PropertySource("classpath:consume-quote.properties")
 public class SpringBootMainApplication {
+    private final Logger logger = LoggerFactory.getLogger(SpringBootMainApplication.class);
+
+    @org.springframework.beans.factory.annotation.Value("${quote.endpoint}")
+    private String quoteEndpoint;
+
     public SpringBootMainApplication() {
         super();
     }
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMainApplication.class, args);
+    }
+
+    @Bean
+    public RestTemplate restTemplate(final RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
+    @Bean
+    @Profile("!test")
+    public CommandLineRunner run(final RestTemplate restTemplate) {
+        return args -> {
+            Quote quote = null;
+
+            try {
+                quote = restTemplate.getForObject(
+                        this.quoteEndpoint + "/random", Quote.class);
+            } catch (final Exception e) {
+                this.logger.error(e.getMessage());
+            }
+
+            if (quote != null && this.logger.isInfoEnabled())
+                this.logger.info(quote.toString());
+        };
     }
 }

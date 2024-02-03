@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
+ (#)pom.xml	0.2.0	02/03/2024
  (#)pom.xml	0.1.0	02/03/2024
 
  @author   Jonathan Parker
- @version  0.1.0
+ @version  0.2.0
  @since    0.1.0
 
  MIT License
@@ -41,7 +42,7 @@
 	</parent>
 	<groupId>net.jmp.spring.boot.rest</groupId>
 	<artifactId>spring-boot-consume-quote</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<name>Spring Boot REST Consumption</name>
 	<description>A simple REST consumption project for Spring Boot</description>
 	<properties>
